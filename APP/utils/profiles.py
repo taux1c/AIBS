@@ -61,6 +61,6 @@ def select_profile():
     return p
 
 
-def create_profile():
+async def create_profile():
     p = User()
     p.build()

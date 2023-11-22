@@ -30,4 +30,5 @@ async def scrape(profile=None):
 
 
 async def daemon_mode():
+    print("This isn't available yet.")
     pass

@@ -35,15 +35,14 @@ async def main_menu():
         pass
     options = {
         '1': create_profile,
-        '2': select_profile,
-        '3': edit_profile,
-        '4': scrape,
-        '5': download,
-        '6': scrape_and_download,
-        '7': daemon_mode,
-        '8': open_github_site,
-        '9': adjust_request_rate,
-        '10': close_app
+        '2': edit_profile,
+        '3': scrape,
+        '4': download,
+        '5': scrape_and_download,
+        '6': daemon_mode,
+        '7': open_github_site,
+        '8': adjust_request_rate,
+        '9': close_app
     }
     while True:
         for key, value in options.items():
