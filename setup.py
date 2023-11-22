@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='AIBS',
-    version='0.0.42',
-    packages=find_packages(),
+    version='0.0.43',
+    packages=['APP','APP/utils', 'APP/scrapers', 'APP/models'],
     url='https://github.com/taux1c/AIBS',
     license='MIT',
     author='Taux1c',
