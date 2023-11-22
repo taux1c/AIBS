@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='AIBS',
-    version='00.00.03',
+    version='0.0.4',
     packages=['APP'],
     url='https://github.com/taux1c/AIBS',
     license='MIT',
