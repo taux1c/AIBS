@@ -3,7 +3,7 @@ from json import dumps, loads
 from pathlib import Path
 
 
-from config import profiles_folder
+from APP.config import profiles_folder
 
 
 class User:

@@ -4,11 +4,11 @@ from tqdm import tqdm
 
 
 
-from utils.make_async import make_async
-from scrapers.find_boards import find_boards
-from scrapers.get_board_links import get_board_link
-from utils.profiles import select_profile
-from scrapers.index_posts import index_posts
+from APP.utils.make_async import make_async
+from APP.scrapers.find_boards import find_boards
+from APP.scrapers.get_board_links import get_board_link
+from APP.utils.profiles import select_profile
+from APP.scrapers.index_posts import index_posts
 
 
 

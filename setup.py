@@ -29,7 +29,7 @@ The tool is provided as-is without any warranty. I, as the creator, accept no li
 Feel free to further modify this disclaimer to ensure it aligns with your intentions and the legal requirements of your project.""",
     entry_points={
         'console_scripts': [
-            'anonib=APP.main:main'
+            'anonib=APP.main'
         ]
     }
 )
