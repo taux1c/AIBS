@@ -30,8 +30,7 @@ async def close_app():
     quit()
 async def main_menu():
     try:
-        pass
-        # webbrowser.open('https://www.buymeacoffee.com/taux1c')
+        webbrowser.open('https://www.buymeacoffee.com/taux1c')
     except:
         pass
     options = {

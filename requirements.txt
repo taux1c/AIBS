@@ -3,3 +3,4 @@ SQLAlchemy~=2.0.23
 httpx~=0.25.1
 tqdm~=4.66.1
 beautifulsoup4~=4.12.2
+lxml~=4.6.1
