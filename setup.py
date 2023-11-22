@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='AIBS',
-    version='0.0.43',
+    version='0.0.44',
     packages=['APP','APP/utils', 'APP/scrapers', 'APP/models'],
     url='https://github.com/taux1c/AIBS',
     license='MIT',
@@ -29,7 +29,7 @@ The tool is provided as-is without any warranty. I, as the creator, accept no li
 Feel free to further modify this disclaimer to ensure it aligns with your intentions and the legal requirements of your project.""",
     entry_points={
         'console_scripts': [
-            'anonib=APP.main:main'
+            'anonib=APP.main'
         ]
     }
 )
