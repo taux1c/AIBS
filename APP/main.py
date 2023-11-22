@@ -6,11 +6,11 @@ from utils.menu import main_menu
 
 
 
-async def main():
-    await main_menu()
+def main():
+    run(main)
 
 
 
 
 if __name__ == '__main__':
-    run(main())
+    main()
