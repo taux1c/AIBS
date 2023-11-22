@@ -8,11 +8,11 @@ from urllib.parse import urljoin
 from tqdm import tqdm
 from asyncio import get_running_loop, as_completed, gather, get_event_loop
 
-from APP.utils.profiles import select_profile
-from APP.models.post import Post
-from APP.utils.make_async import make_async, async_as_completed
-from APP.config import headers, timeout, base_urls
-from APP.utils.sanitize_path import sanitize_name
+from utils.profiles import select_profile
+from models.post import Post
+from utils.make_async import make_async, async_as_completed
+from config import headers, timeout, base_urls
+from utils.sanitize_path import sanitize_name
 
 
 async def download(profile=None):

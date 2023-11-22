@@ -6,9 +6,9 @@ from random import choice
 from urllib.parse import urljoin
 
 
-from APP.config import base_urls, headers, timeout
-from APP.utils.make_async import make_async
-from APP.models.post import Post
+from config import base_urls, headers, timeout
+from utils.make_async import make_async
+from models.post import Post
 
 
 async def index_posts(board_url, category, subject, requests_semaphore, profile):

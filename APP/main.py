@@ -2,7 +2,7 @@
 from asyncio import run
 
 
-from APP.utils.menu import main_menu
+from utils.menu import main_menu
 
 
 

@@ -1,5 +1,5 @@
 
-from APP.config import base_urls
+from config import base_urls
 
 async def get_board_link(board):
     board_title = board.find(class_="linkName").text

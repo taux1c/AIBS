@@ -2,9 +2,9 @@
 import webbrowser
 
 
-from APP.utils.profiles import select_profile, create_profile
-from APP.scrapers.scrape import scrape, daemon_mode
-from APP.utils.download import download
+from utils.profiles import select_profile, create_profile
+from scrapers.scrape import scrape, daemon_mode
+from utils.download import download
 
 
 async def scrape_and_download():

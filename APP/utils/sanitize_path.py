@@ -1,7 +1,7 @@
 
 import string
 from re import sub
-from APP.config import letter_subs, chars_replace, max_message_len
+from config import letter_subs, chars_replace, max_message_len
 
 async def fix_message(message):
     for k,v in letter_subs.items():

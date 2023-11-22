@@ -6,8 +6,8 @@ from random import choice
 from urllib.parse import urljoin
 
 
-from APP.config import base_urls
-from APP.config import headers, timeout
+from config import base_urls
+from config import headers, timeout
 
 # Pick a random base url to use to avoid hitting the same url over and over. (All urls hit the same server but cloudflare
 # will block you if you hit the same url too many times in a row.) Adding proxies soon.
