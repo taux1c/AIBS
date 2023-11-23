@@ -34,7 +34,7 @@ class Post(Base):
         self.save_location = str(profile.save_location)
         self.media = dumps(self.media)
         Base.metadata.create_all(create_engine(profile.db_string))
-        engine = create_engine(profile.db_string)
+        engine = create_engine(profile.db_string, pool_pre_ping=True)
         Session = sessionmaker(bind=engine)
         with Session() as session:
             results = session.query(Post).filter(Post.post_id == self.post_id).first()

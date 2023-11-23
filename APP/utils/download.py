@@ -39,34 +39,37 @@ async def download(profile=None):
         engine.dispose()
 
 async def final_download(result, profile, client):
-    e = create_engine(profile.db_string)
-    S = sessionmaker(bind=e)
-    with S() as s:
-        result = s.query(Post).filter(Post.post_id == result).first()
-        result.load()
-        async for item in make_async(result.media):
-            save_location = Path(await sanitize_name(str(profile.save_location)), await sanitize_name(result.category), await sanitize_name(result.subject), await sanitize_name(result.message), await sanitize_name(result.author))
-            save_location.mkdir(parents=True, exist_ok=True)
-            tried_urls = []
-            file_name = item.split('/')[-1]
-            file_path = Path(save_location, file_name)
-            while True:
-                try:
-                    possible_urls = [u for u in base_urls if u not in tried_urls]
-                    used_url = choice(possible_urls)
-                    tried_urls.append(used_url)
-                    url = urljoin(used_url, item)
-                    async with client.stream('GET', url, headers=headers, timeout=timeout) as r:
-                        async with aiofiles.open(file_path, 'wb') as f:
-                            async for chunk in r.aiter_bytes():
-                                await f.write(chunk)
+    try:
+        e = create_engine(profile.db_string)
+        S = sessionmaker(bind=e)
+        with S() as s:
+            result = s.query(Post).filter(Post.post_id == result).first()
+            result.load()
+            async for item in make_async(result.media):
+                save_location = Path(await sanitize_name(str(profile.save_location)), await sanitize_name(result.category), await sanitize_name(result.subject), await sanitize_name(result.message), await sanitize_name(result.author))
+                save_location.mkdir(parents=True, exist_ok=True)
+                tried_urls = []
+                file_name = item.split('/')[-1]
+                file_path = Path(save_location, file_name)
+                while True:
+                    try:
+                        possible_urls = [u for u in base_urls if u not in tried_urls]
+                        used_url = choice(possible_urls)
+                        tried_urls.append(used_url)
+                        url = urljoin(used_url, item)
+                        async with client.stream('GET', url, headers=headers, timeout=timeout) as r:
+                            async with aiofiles.open(file_path, 'wb') as f:
+                                async for chunk in r.aiter_bytes():
+                                    await f.write(chunk)
 
-                    result.downloaded = True
-                    result.dump()
-                    s.commit()
-                    break
-                except Exception as e:
-                    while len(tried_urls) < len(base_urls):
-                        pass
-                    else:
+                        result.downloaded = True
+                        result.dump()
+                        s.commit()
                         break
+                    except Exception as e:
+                        while len(tried_urls) < len(base_urls):
+                            pass
+                        else:
+                            break
+    except Exception as e:
+        print("Download Error: ", e)
