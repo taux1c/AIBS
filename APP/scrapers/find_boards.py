@@ -22,6 +22,9 @@ async def find_boards(board:str, requests_semaphore):
             while r:
                 try:
                     possible_urls = [url for url in base_urls if url not in tried_urls]
+                    if len(possible_urls) == 0:
+                        r = False
+                        continue
                     used_url = choice(possible_urls)
                     tried_urls.append(used_url)
                     board_url = urljoin(used_url, board)

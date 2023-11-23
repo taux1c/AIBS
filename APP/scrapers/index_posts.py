@@ -19,6 +19,9 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
             while r:
                 try:
                     possible_urls = [url for url in base_urls if url not in tried_urls]
+                    if len(possible_urls) == 0:
+                        r = False
+                        continue
                     used_url = choice(possible_urls)
                     tried_urls.append(used_url)
                     board_url = urljoin(used_url, board_url)
