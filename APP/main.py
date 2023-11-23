@@ -7,7 +7,7 @@ from utils.menu import main_menu
 
 
 def main():
-    run(main)
+    run(main_menu())
 
 
 
