@@ -25,11 +25,11 @@ async def find_boards(board:str, requests_semaphore):
                     used_url = choice(possible_urls)
                     tried_urls.append(used_url)
                     board_url = urljoin(used_url, board)
-                    response = await client.get(urljoin(base_url, board), headers=headers, timeout=timeout, follow_redirects=True)
+                    response = await client.get(board_url, headers=headers, timeout=timeout, follow_redirects=True)
                     if not response:
                         r = False
                         continue
-                    if response is None or not response.status_code == 200:
+                    if response is None or response.status_code != 200:
                         print(f'Error with {used_url}, status code {response.status_code}')
                         r = False
                     soup = BeautifulSoup(response.content, 'html.parser')
