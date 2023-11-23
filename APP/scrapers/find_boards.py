@@ -1,9 +1,10 @@
 
 import ssl
-from httpx import AsyncClient
+from httpx import AsyncClient, TimeoutException, HTTPError
 from bs4 import BeautifulSoup
 from random import choice
 from urllib.parse import urljoin
+from asyncio import sleep
 
 
 from APP.config import base_urls
@@ -19,6 +20,7 @@ async def find_boards(board:str, requests_semaphore):
         async with AsyncClient() as client:
             tried_urls = []
             r = True
+            attempt = 0
             while r:
                 try:
                     possible_urls = [url for url in base_urls if url not in tried_urls]
@@ -40,6 +42,9 @@ async def find_boards(board:str, requests_semaphore):
                     return boards
                 except ssl.SSLError:
                     pass
+                except (TimeoutException, HTTPError) as exc:
+                    print(f"Attempt {attempt + 1} failed: {exc}")
+                    await sleep(1)
 
                 except Exception as e:
                     r = False

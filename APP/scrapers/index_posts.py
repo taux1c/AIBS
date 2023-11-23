@@ -4,6 +4,8 @@ from httpx import AsyncClient
 from bs4 import BeautifulSoup as BS
 from random import choice
 from urllib.parse import urljoin
+from asyncio import sleep
+from httpx import TimeoutException, HTTPError
 
 
 from APP.config import base_urls, headers, timeout
@@ -16,6 +18,7 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
         async with AsyncClient() as client:
             tried_urls = []
             r = True
+            attempt = 0
             while r:
                 try:
                     possible_urls = [url for url in base_urls if url not in tried_urls]
@@ -54,6 +57,9 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                 except ssl.SSLError:
                     print(f'SSL Error with {used_url} Retrying...')
                     pass
+                except (TimeoutException, HTTPError) as exc:
+                    print(f"Attempt {attempt + 1} failed: {exc}")
+                    await sleep(1)
 
                 except Exception as e:
                     raise e
