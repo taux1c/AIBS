@@ -56,10 +56,24 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                         raise e
                 except ssl.SSLError:
                     print(f'SSL Error with {used_url} Retrying...')
-                    pass
+                    await sleep(1)
+                    attempt += 1
+                    if attempt > 3:
+                        attempt += 1
+                    else:
+                        print(f'Error with {used_url}, {e}')
+                        r = False
+                        continue
                 except (TimeoutException, HTTPError) as exc:
                     print(f"Attempt {attempt + 1} failed: {exc}")
                     await sleep(1)
+                    attempt += 1
+                    if attempt > 3:
+                        attempt += 1
+                    else:
+                        print(f'Error with {used_url}, {e}')
+                        r = False
+                        continue
 
                 except Exception as e:
                     raise e
