@@ -61,7 +61,7 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                     if attempt > 3:
                         continue
                     else:
-                        print(f'Error with {used_url}, {e}')
+                        print(f'Error with {used_url}')
                         r = False
                         continue
                 except (TimeoutException, HTTPError) as exc:
@@ -71,7 +71,7 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                     if attempt > 3:
                         continue
                     else:
-                        print(f'Error with {used_url}, {e}')
+                        print(f'Error with {used_url}')
                         r = False
                         continue
 
