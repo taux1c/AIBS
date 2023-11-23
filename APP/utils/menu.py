@@ -5,6 +5,7 @@ import webbrowser
 from APP.utils.profiles import select_profile, create_profile
 from APP.scrapers.scrape import scrape, daemon_mode
 from APP.utils.download import download
+from APP.utils.db_close import close_db_connection
 
 
 async def scrape_and_download():
@@ -42,7 +43,8 @@ async def main_menu():
         '6': daemon_mode,
         '7': open_github_site,
         '8': adjust_request_rate,
-        '9': close_app
+        '9': close_app,
+        '10': close_db_connection
     }
     while True:
         for key, value in options.items():
