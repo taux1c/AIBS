@@ -30,6 +30,9 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
 
                 except Exception as e:
                     raise e
+                if not response:
+                    r = False
+                    continue
                 if response is None or not response.status_code == 200:
                     print(f'Error with {used_url}, status code {response.status_code}')
                     r = False
