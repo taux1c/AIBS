@@ -59,7 +59,7 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                     await sleep(1)
                     attempt += 1
                     if attempt > 3:
-                        attempt += 1
+                        continue
                     else:
                         print(f'Error with {used_url}, {e}')
                         r = False
@@ -69,7 +69,7 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                     await sleep(1)
                     attempt += 1
                     if attempt > 3:
-                        attempt += 1
+                        continue
                     else:
                         print(f'Error with {used_url}, {e}')
                         r = False
