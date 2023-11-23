@@ -30,6 +30,10 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
 
                 except Exception as e:
                     raise e
+                if not response.status_code == 200:
+                    print(f'Error with {used_url}, status code {response.status_code}')
+                    r = False
+                    continue
                 try:
                     soup = BS(response.content, 'lxml')
                     posts_container = soup.find(class_="opCell")
