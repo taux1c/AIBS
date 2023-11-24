@@ -45,7 +45,11 @@ async def index_posts(board_url, category, subject, requests_semaphore, profile)
                         media_posts = media_replies + [origin_post] if origin_post.find_all(class_="panelUploads") else media_replies
                         async for post in make_async(media_posts):
                             message = post.find(class_="divMessage").text
+                            if message == '':
+                                message = "No message found."
                             author = post.find(class_="linkName").text
+                            if author == '':
+                                author = "No author found."
                             post_id = post.find(class_="deletionCheckBox")['name']
                             post_category = category
                             post_subject = subject
