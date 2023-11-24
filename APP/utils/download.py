@@ -40,6 +40,11 @@ async def download(profile=None):
 
 async def final_download(result, profile):
     try:
+        if "sqlite" in profile.db_string:
+            db_path = Path(profile.db_string.split("///")[1])
+            if not db_path.exists():
+                print("Database does not exist. Please run the scraper first.")
+                return
         e = create_engine(profile.db_string)
         S = sessionmaker(bind=e)
         async with AsyncClient() as client:
