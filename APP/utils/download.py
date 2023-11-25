@@ -1,53 +1,77 @@
-import aiofiles
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pathlib import Path
-from random import choice
-from urllib.parse import urljoin
-from tqdm import tqdm
-from asyncio import Semaphore, Queue, get_running_loop
+from asyncio import sleep
 from httpx import AsyncClient
+from urllib.parse import urljoin
+from random import choice
+from json import loads
 
-from APP.utils.profiles import select_profile
+
+
 from APP.models.post import Post
-from APP.utils.sanitize_path import sanitize_name
 from APP.config import headers, timeout, base_urls
+from APP.utils.profiles import select_profile
+from APP.utils.sanitize_path import sanitize_name
 
-loop = get_running_loop()
-download_queue = Queue(loop=loop)
 
-async def download_start():
-    profile = select_profile()
-    requests_semaphore = Semaphore(profile.max_concurrent_requests)
-    async with requests_semaphore:
-        async with AsyncClient() as client:
-            engine = create_engine(profile.db_string)
-            Session = sessionmaker(bind=engine)
-            with Session() as session:
-                results = session.query(Post).filter(Post.downloaded == False)
-                if results is not None:
-                    for result in results:
-                        for media in result.media:
-                            save_location = Path(profile.save_location, result.category, sanitize_name(result.subject), sanitize_name(result.message), sanitize_name(result.author))
-                            save_location.mkdir(parents=True, exist_ok=True)
-                            await download_queue.put(final_download(save_location=save_location, media=media, profile=profile, client=client))
 
+
+
+# This eventually needs to be changed to an async session to open event loop back up.
 async def download():
-    for i in range(10):
-        loop.create_task(download_worker())
-        await download_start()
+    global x
+    profile = select_profile()
+    engine = create_engine(profile.db_string, pool_pre_ping=True)
+    with engine.begin() as con:
+        Session = sessionmaker(bind=con)
+        with Session() as session:
+            results = session.query(Post).filter(Post.downloaded == False).all()
 
-async def final_download(save_location=None, media=None, profile=None, client=None):
-    file_name = media.split('/')[-1]
-    tried_urls = []
-    possible_urls = [x for x in base_urls if x not in tried_urls]
-    used_url = choice(possible_urls)
-    async with client.stream("GET", media, headers=headers, timeout=timeout) as response:
-        async with aiofiles.open(Path(save_location, file_name), mode='wb') as f:
-            async for chunk in response.aiter_bytes():
-                await f.write(chunk)
+            for result in results:
+                    for url in loads(result.media):
+                        filename = url.split('/')[-1]
+                        save_location = Path(profile.save_location)
+                        save_location.mkdir(parents=True, exist_ok=True)
+                        fp = Path(save_location, result.category, sanitize_name(result.subject), sanitize_name(result.message), sanitize_name(result.author))
+                        fp.mkdir(parents=True, exist_ok=True)
+                        file_obj = Path(fp, filename[-15:])
+                        async with AsyncClient(follow_redirects=True) as browser_session:
+                            x = True
+                            tried_urls = []
+                            while x:
+                                try:
+                                    possible_urls = [url for url in base_urls if url not in tried_urls]
+                                    if len(possible_urls) == 0:
+                                        x = False
+                                        continue
+                                    else:
+                                        used_url = choice(possible_urls)
+                                        tried_urls.append(used_url)
+                                    url = urljoin(used_url, url)
+                                    response = await browser_session.get(url, headers=headers, timeout=timeout)
+                                    print(f"Downloading {file_obj}.")
+                                    with open(file_obj, 'wb') as f:
+                                        f.write(response.content)
 
-async def download_worker():
-    while download_queue.qsize() > 0:
-        task = download_queue.get()
-        await task
+
+                                    # Create a second session specifically for updating the downloaded status
+                                    with engine.begin() as con2:
+                                        session2 = Session(bind=con2)
+                                        post_to_update = session2.query(Post).filter_by(id=result.id).first()
+                                        post_to_update.downloaded = True
+                                        session2.commit()
+                                    x = False
+
+                                except Exception as e:
+                                    # Handle exceptions or log error messages
+                                    print(f"Error processing Post {result.id}: {e}")
+                                    pass
+    # Commit any remaining changes and close the session
+    session.commit()
+    session.close()
+
+
+
