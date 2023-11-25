@@ -4,6 +4,8 @@ This is a database-centric web scraper designed for extracting information from 
 Usage
 Users are free to utilize this tool for their needs without any mandatory requirement for donations. However, if you find the tool helpful, you can make voluntary contributions through the link provided when the browser opens.
 
+Should you choose to use this package you can do so by simply using pip and running the command "pip install aibs" then once the install completes you can use "anonib" to start the scraper. To upgrade to the latest version at a later date just type "pip install --upgrade aibs".
+
 Contributing
 Feel free to contribute to this project by submitting pull requests. Your contributions can help enhance the functionality and efficiency of the web scraper for the benefit of the community.
 
