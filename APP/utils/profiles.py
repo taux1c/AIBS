@@ -14,6 +14,7 @@ class User:
         self.categories = None
         self.save_location = None
         self.max_concurrent_requests = 10
+        self.max_concurrent_files = 10
         self.db_string = None
 
 

@@ -8,7 +8,7 @@ async def fix_message(message):
         message = message.replace(k,v)
     return message
 
-async def sanitize_name(message):
+def sanitize_name(message):
     if len(message) > max_message_len:
         message = message[-max_message_len:]
     # Using the last part of the message because this is used to sanitize file names and it will remove the extension.
@@ -18,10 +18,10 @@ async def sanitize_name(message):
     if message.endswith('.'):
         message = message.replace('.','')
     message = message.strip()
-    message = await sanitize_patch(message)
+    message = sanitize_patch(message)
     return message
 
-async def sanitize_patch(filename):
+def sanitize_patch(filename):
     # Replace invalid characters with underscores
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
     sanitized_filename = ''.join(c if c in valid_chars else '_' for c in filename)
